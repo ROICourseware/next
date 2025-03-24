@@ -1,0 +1,27 @@
+//   db.ts
+
+'use client';
+
+import { openDB, IDBPDatabase } from 'idb';
+
+const storeKey = 'storeKey';
+const schemaKey = 'schemaKey';
+
+interface DatabaseSchema {
+
+}
+
+async function getDb(): Promise<IDBPDatabase<DatabaseSchema> | undefined> {
+    if (!('indexedDB' in window)) {
+      console.log('This browser does not support IndexedDB');
+      return undefined;
+    }
+    return await openDB<DatabaseSchema>(schemaKey, 1, {
+        upgrade(upgradeDb) {
+          upgradeDb.createObjectStore(storeKey, {
+            keyPath: 'id'
+          });
+        },
+      });
+  }
+

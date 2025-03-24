@@ -1,0 +1,91 @@
+// actions.ts
+
+
+export type State = {
+  errors?: {
+    title?: string[];
+    author?: string[];
+    cover?: string[];
+  }
+  message?: string | null;
+};
+
+const addFormSchema = z.object({
+  title: z.string().min(1, { message: 'Title must be at least 1 character long.' }),
+  author: z.string().min(1, { message: 'Author must be at least 1 character long.' }),
+  cover: z.string().optional(),
+});
+
+async function validate(formData: FormData) {
+  return addFormSchema.safeParse({
+    title: formData.get("title"),
+    author: formData.get("author"),
+    cover: formData.get("cover")
+  });
+}
+
+async function checkUser() {
+  const session = await auth();
+  if (!session?.user?.email) {
+      redirect('/');
+  }
+  return session.user.email;
+}
+
+export async function addBook(prevState: State, formData: FormData) {
+  const email = await checkUser();
+
+  const validatedData = await validate(formData);
+  if (!validatedData.success) {
+    return {
+      errors: validatedData.error.flatten().fieldErrors,
+      message: "Please fill in the required fields."
+    };
+  };
+
+  const book: ConfidentialBook = {
+    title: validatedData.data.title,
+    author: validatedData.data.author,
+    cover: validatedData.data.cover,
+    id: 0,
+    owner: email
+  };
+
+  const id = await new BookRepository().addBook(book);
+  redirect(`/reviews/${id}`);
+}
+
+
+
+
+// book-form.tsx
+
+'use client';
+
+import { Book } from "@/app/lib/models/book";
+
+export default function BookForm({book}: {book : Book}) {
+    
+
+    return (
+        <form  className="mt-4 row">
+            <div className="mb-3">
+                <label htmlFor="title" className="form-label">Title </label>
+                <input type="text" name="title" id="title" className="form-control form-control-lg" placeholder="Title" defaultValue={book.title} />
+
+            </div>
+            <div className="mb-3">
+                <label htmlFor="author" className="form-label">Author </label>
+                <input type="text" id="author" name="author" className="form-control form-control-lg" placeholder="Author" defaultValue={book.author}  />
+
+            </div>
+            <input type="hidden" name="id" value={book.id} />
+            <input type="hidden" name="cover" value={book.cover} />
+            <button type="submit" className="btn btn-secondary col-2">Add Book</button>
+
+        </form>
+    );
+}
+
+
+

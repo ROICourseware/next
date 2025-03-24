@@ -1,0 +1,29 @@
+// code samples exercise 2.1
+
+
+// BONUS samples
+
+// CSS
+
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    max-width: 250px;
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+  

@@ -1,0 +1,36 @@
+// npm install
+
+npm i -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom vite-tsconfig-paths
+
+//   vitest.config.ts
+
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig(async () => {
+  const tsconfigPaths = await import('vite-tsconfig-paths').then(mod => mod.default);
+
+  return {
+    plugins: [tsconfigPaths(), react()],
+    test: {
+      environment: 'jsdom',
+      setupFiles: './src/setup.ts',
+      server: {
+        deps: {
+          inline: ['next']
+        }
+      }
+    },
+  };
+});
+
+
+// BONUS imports
+
+import { describe, it, expect, vi, Mock } from 'vitest';
+import ReviewRepository from "@/app/lib/repositories/api-review-repository";
+import { Review, ConfidentialReview } from "@/app/lib/models/review";
+import {  addReview } from './actions';
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import 'server-only';

@@ -1,0 +1,83 @@
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    max-width: 250px;
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+        left: -150%;
+    }
+    50% {
+        left: 100%;
+    }
+    100% {
+        left: 100%;
+    }
+  }
+  
+  .card-image-skeleton {
+    width: 180px;
+    height: 180px;
+    background: #e0e0e0;
+    margin-bottom: 1rem;
+    margin-top: 1rem
+  }
+  
+  .card-text-skeleton {
+    width: 180px;
+    height: 1.2rem;
+    background: #e0e0e0;
+    margin: 1rem;
+  }
+  
+  .card-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    max-width: 250px;
+    margin: 1rem;
+  }
+
+  .search-bar {
+    background-color: black;
+    color: white;
+    padding: 0rem 0.5rem 0.5rem 0.5rem;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+  }
+
+.search-bar label {
+    margin-top: 0.7rem;
+}

@@ -1,0 +1,86 @@
+'use client';
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+
+export default function Pagination({
+    total = 0,
+    currentPage = 1
+}: {
+    total: number;
+    currentPage: number;
+}) {
+
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const pageSize = process.env.NEXT_PUBLIC_PAGE_SIZE ? parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE) : 10;
+    const [pageList, setPageList] = useState<number[]>([]);
+    const [isFirstBlock, setIsFirstBlock] = useState<boolean>(true);
+    const [isLastBlock, setIsLastBlock] = useState<boolean>(false);
+    const totalPages = Math.ceil(total / pageSize);
+
+    useEffect(() => {
+        const currentBlock = Math.floor((currentPage - 1) / 10);
+        const startPage = currentBlock * 10 + 1;
+        const endPage = Math.min(startPage + 9, totalPages);
+        const newPageList = [];
+
+        for (let i = startPage; i <= endPage; i++) {
+            newPageList.push(i);
+        }
+
+        setPageList(newPageList);
+        setIsFirstBlock(currentBlock === 0);
+        setIsLastBlock(endPage === totalPages);
+    }, [total, pageSize, currentPage, totalPages]);
+
+    const createURL = (pageNumber: number | string) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('page', pageNumber.toString());
+        params.set('total', total.toString());
+        return `${pathname}?${params.toString()}`;
+      };
+
+    const handlePreviousBlock = () => {
+        const previousBlockPage = Math.max(1, pageList[0] - 10);
+        return createURL(previousBlockPage);
+    };
+
+    const handleNextBlock = () => {
+        const nextBlockPage = pageList[pageList.length - 1] + 1;
+        return createURL(nextBlockPage);
+    };
+
+    return (
+        total > pageSize ?
+            <ul className="list-group">
+                <li className="list-group-item">
+                    <ul className="list-inline">
+                        {!isFirstBlock && (
+                            <li className="list-inline-item">
+                                <Link href={handlePreviousBlock()} className={`btn ${currentPage === 1 ? 'btn-secondary' : 'btn-light'}`}>
+                                    &lt;&lt;
+                                </Link>
+                            </li>
+                        )}
+                        {pageList.map((page) => (<li className="list-inline-item" key={page}>
+                            <Link href={createURL(page)} className={`btn ${page === currentPage ? 'btn-secondary' : 'btn-light'}`} >
+                                {page}
+                            </Link>
+                        </li>
+                        ))}
+                        {!isLastBlock && (
+                            <li className="list-inline-item">
+                                <Link href={handleNextBlock()} className={`btn ${currentPage === 1 ? 'btn-secondary' : 'btn-light'}`}>
+                                    &gt;&gt;
+                                </Link>
+                            </li>
+                        )}
+                    </ul>
+                </li>
+            </ul> : ''
+    )
+
+}

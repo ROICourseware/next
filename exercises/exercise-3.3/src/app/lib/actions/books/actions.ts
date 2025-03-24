@@ -1,7 +1,7 @@
 'use server';
 
 import { Book } from "@/app/lib/models/book";
-import BookRepository from "@/app/lib/repositories/api-book-repository";
+import BookRepository from "@/app/lib/repositories/book-repository";
 
 
 export async function getBooksCount(): Promise<number> {

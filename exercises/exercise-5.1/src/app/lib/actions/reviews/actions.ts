@@ -1,6 +1,6 @@
 'use server';
 
-import ReviewRepository from "@/app/lib/repositories/api-review-repository";
+import ReviewRepository from "@/app/lib/repositories/review-repository";
 import { Review } from "@/app/lib/models/review";
 
 export async function getReviewsByBookIdCount(bookId: number): Promise<number> {

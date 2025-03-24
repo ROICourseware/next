@@ -1,6 +1,6 @@
 'use server';
 
-import ReviewRepository from "@/app/lib/repositories/api-review-repository";
+import ReviewRepository from "@/app/lib/repositories/review-repository";
 import { ConfidentialReview, Review } from "@/app/lib/models/review";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";

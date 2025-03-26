@@ -1,5 +1,5 @@
 import { getReviewsByBookId } from '@/app/lib/actions/reviews/actions';
-import ReviewRepository from '@/app/lib/repositories/api-review-repository';
+import ReviewRepository from '@/app/lib/repositories/review-repository';
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';

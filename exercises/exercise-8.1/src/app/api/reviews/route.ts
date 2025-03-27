@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     const repo = new ReviewRepository();
     try {
         const rev = await repo.addReview({ id: 0, owner: email, ...body });
-        return NextResponse.json({ message: `Review ${rev} added successfully` });
+        return NextResponse.json({ message: `Review ${rev.id} added successfully` });
     } catch (error) {
         console.log(error);
         return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });

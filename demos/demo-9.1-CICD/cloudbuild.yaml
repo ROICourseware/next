@@ -16,6 +16,8 @@ steps:
         $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
       - >-
         --build-arg=API_URL=https://api-748767445624.us-central1.run.app/api/bookreactions/
+      - --build-arg=NEXT_PUBLIC_STORE_KEY=favorites
+      - --build-arg=NEXT_PUBLIC_SCHEMA_KEY=nlbr
       - .
       - '-f'
       - Dockerfile

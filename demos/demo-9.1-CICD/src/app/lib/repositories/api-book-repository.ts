@@ -92,7 +92,7 @@ class BookRepository {
     return result;
   }
 
-  public async addBook(book: Book): Promise<number> {
+  public async addBook(book: ConfidentialBook): Promise<number> {
     const response = await fetch(`${URL}books`, {
       method: 'POST',
       headers: {

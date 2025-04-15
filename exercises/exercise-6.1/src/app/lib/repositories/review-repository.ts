@@ -1,5 +1,5 @@
 
-import { Review } from '@/app/lib/models/review';
+import { ConfidentialReview, Review } from '@/app/lib/models/review';
 import pool from '@/app/lib/repositories/pool';
 import 'server-only';
 
@@ -62,7 +62,7 @@ class ReviewRepository {
         return sanitizedRows;
     }
 
-    public async getReview(id: number): Promise<Review> {
+    public async getReviewToEdit(id: number): Promise<ConfidentialReview> {
         const   result = await pool.query('SELECT * FROM review WHERE id = $1', [id]);
         const row = result.rows[0];
         return {
@@ -74,7 +74,7 @@ class ReviewRepository {
         }
     }
 
-    public async addReview(review: Review): Promise<number> {
+    public async addReview(review: ConfidentialReview): Promise<Review> {
         const query = 'INSERT INTO review (review, name, owner, book_id) VALUES ($1, $2, $3, $4) RETURNING id';
         const values = [review.review, review.name, review.owner, review.bookId, ];
         const result = await pool.query(query, values);

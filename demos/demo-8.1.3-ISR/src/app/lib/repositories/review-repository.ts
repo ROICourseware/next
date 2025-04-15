@@ -74,7 +74,7 @@ class ReviewRepository {
         }
     }
 
-    public async addReview(review: ConfidentialReview): Promise<number> {
+    public async addReview(review: ConfidentialReview): Promise<Review> {
         const query = 'INSERT INTO review (review, name, owner, book_id) VALUES ($1, $2, $3, $4) RETURNING id';
         const values = [review.review, review.name, review.owner, review.bookId, ];
         const result = await pool.query(query, values);

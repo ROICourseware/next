@@ -106,7 +106,7 @@ class BookRepository {
     }
 
 
-    public async addBook(book: Book): Promise<number> {
+    public async addBook(book: ConfidentialBook): Promise<number> {
         const query = 'INSERT INTO book (title, author, cover, owner) VALUES ($1, $2, $3, $4) RETURNING *';
         const values = [book.title, book.author, book.cover, book.owner];
 

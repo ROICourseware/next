@@ -1,5 +1,5 @@
 
-import { Book } from "@/app/lib/models/book";
+import { Book, ConfidentialBook } from "@/app/lib/models/book";
 import pool from '@/app/lib/repositories/pool';
 import 'server-only';
 
@@ -90,7 +90,7 @@ class BookRepository {
        return this.parseBook(result.rows[0]);
     }
 
-    public async getBookToEdit(id: number): Promise<Book> {
+    public async getBookToEdit(id: number): Promise<ConfidentialBook> {
         const   result = await pool.query('SELECT * FROM book WHERE id = $1', [id]);
         if (result.rowCount === 0) {
             throw new Error('Book not found');
@@ -106,7 +106,7 @@ class BookRepository {
     }
 
 
-    public async addBook(book: Book): Promise<number> {
+    public async addBook(book: ConfidentialBook): Promise<number> {
         const query = 'INSERT INTO book (title, author, cover, owner) VALUES ($1, $2, $3, $4) RETURNING *';
         const values = [book.title, book.author, book.cover, book.owner];
 

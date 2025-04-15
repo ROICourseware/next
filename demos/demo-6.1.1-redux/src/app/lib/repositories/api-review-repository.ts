@@ -30,6 +30,7 @@ class ReviewRepository {
     const filteredReviews = reviews.filter(review => review.bookId === bookId)
       .sort((a, b) => b.id - a.id);
     const result = filteredReviews.slice((page - 1) * limit, page * limit);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return result.map(({ owner, ...review }) => review);
   }
 
@@ -57,7 +58,7 @@ class ReviewRepository {
     return result;
   }
 
-  public async addReview(review: Review): Promise<Review> {
+  public async addReview(review: ConfidentialReview): Promise<Review> {
     const response = await fetch(`${URL}reviews`, {
       method: 'POST',
       headers: {
@@ -90,6 +91,7 @@ class ReviewRepository {
     }
 
     const result = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { owner, ...rest } = result;
     return rest as Review;
   }

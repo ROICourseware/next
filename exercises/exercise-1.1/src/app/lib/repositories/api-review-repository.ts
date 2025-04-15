@@ -58,7 +58,7 @@ class ReviewRepository {
     return result;
   }
 
-  public async addReview(review: Review): Promise<Review> {
+  public async addReview(review: ConfidentialReview): Promise<Review> {
     const response = await fetch(`${URL}reviews`, {
       method: 'POST',
       headers: {

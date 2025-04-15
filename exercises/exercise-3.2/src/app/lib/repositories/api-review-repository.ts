@@ -1,39 +1,20 @@
-import { Review } from '@/app/lib/models/review';
+import { Review , ConfidentialReview} from '@/app/lib/models/review';
 import BookRepository from '@/app/lib/repositories/api-book-repository';
-import 'server-only';
 
 const URL = process.env.API_URL;
 
 class ReviewRepository {
 
-  processReview(review: Review): Review {
-    return {
-      id: review.id,
-      review: review.review,
-      name: review.name,
-      bookId: review.bookId
-    }
-  }
-
-  processReviews(reviews: Review[]): Review[] {
-    return reviews.map((review) => this.processReview(review));
-  }
-
   async getTotal(reviews: Review[]): Promise<number> {
     return reviews.length;
   }
 
-  async fetchReviews(): Promise<Review[]> {
-    const response = await fetch(`${URL}reviews`, {
-      headers: {
-        'Cache-Control': 'no-store', 
-      },
-      cache: 'no-store',
-    });
+  async fetchReviews(): Promise<ConfidentialReview[]> {
+    const response = await fetch(`${URL}reviews`);
     if (!response.ok) {
       throw new Error('Failed to fetch reviews');
     }
-    const reviews: Review[] = await response.json();
+    const reviews: ConfidentialReview[] = await response.json();
     return reviews;
   }
 
@@ -49,7 +30,8 @@ class ReviewRepository {
     const filteredReviews = reviews.filter(review => review.bookId === bookId)
       .sort((a, b) => b.id - a.id);
     const result = filteredReviews.slice((page - 1) * limit, page * limit);
-    return this.processReviews(result);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return result.map(({ owner, ...review }) => review);
   }
 
   public async getReviewsByOwner(owner: string): Promise<Review[]> {
@@ -67,7 +49,7 @@ class ReviewRepository {
       });
   }
 
-  public async getReview(id: number): Promise<Review> {
+  public async getReviewToEdit(id: number): Promise<ConfidentialReview> {
     const reviews = await this.fetchReviews();
     const result = reviews.find(review => review.id === id);
     if (!result) {
@@ -76,7 +58,7 @@ class ReviewRepository {
     return result;
   }
 
-  public async addReview(review: Review): Promise<Review> {
+  public async addReview(review: ConfidentialReview): Promise<Review> {
     const response = await fetch(`${URL}reviews`, {
       method: 'POST',
       headers: {
@@ -109,7 +91,9 @@ class ReviewRepository {
     }
 
     const result = await response.json();
-    return this.processReview(result as Review);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { owner, ...rest } = result;
+    return rest as Review;
   }
 
 

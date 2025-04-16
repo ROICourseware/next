@@ -47,6 +47,28 @@ class BookRepository {
         return this.parseBooks(result.rows);
     }
 
+    async fetchConfidentialBooks(): Promise<ConfidentialBook[]> {
+        const result = await pool.query('SELECT * FROM book ORDER BY title ASC')
+        const books: ConfidentialBook[]  = result.rows.map((row) => {
+            return {
+                id: row.id,
+                title: row.title,
+                author: row.author,
+                cover: row.cover === 'null' ? '' : row.cover,
+                owner: row.owner
+            }
+        });
+        return books;
+      }
+    
+      // method made public to support ISR/dynamic params
+      public async fetchBooks(): Promise<Book[]> {
+        const books = await this.fetchConfidentialBooks();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return books.map(({ owner, ...book }) => book);
+      }
+    
+
     public async getRecent(): Promise<Book[]> {
         const result = await pool.query('SELECT * FROM book ORDER BY id DESC LIMIT 3')
         return this.parseBooks(result.rows);

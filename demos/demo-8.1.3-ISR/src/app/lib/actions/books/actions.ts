@@ -1,7 +1,7 @@
 'use server';
 
 import { Book, ConfidentialBook } from "@/app/lib/models/book";
-import BookRepository from "@/app/lib/repositories/api-book-repository";
+import BookRepository from "@/app/lib/repositories/book-repository";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { z } from "zod";

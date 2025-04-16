@@ -1,6 +1,6 @@
 
 import { describe, it, expect, vi, Mock } from 'vitest';
-import ReviewRepository from "@/app/lib/repositories/api-review-repository";
+import ReviewRepository from "@/app/lib/repositories/review-repository";
 import { ConfidentialReview, Review } from "@/app/lib/models/review";
 import {
     getReviewsByBookIdCount,
